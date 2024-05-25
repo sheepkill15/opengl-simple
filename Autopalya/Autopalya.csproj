@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Silk.NET" Version="2.20.0"/>
+        <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.21.0"/>
+        <PackageReference Include="StbImageSharp" Version="2.27.14"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\skybox.png" />
+      <EmbeddedResource Include="Resources\skybox.png" />
+      <None Remove="Shaders\FragmentShader.frag" />
+      <EmbeddedResource Include="Shaders\FragmentShader.frag" />
+      <None Remove="Shaders\VertexShader.vert" />
+      <EmbeddedResource Include="Shaders\PBRFragment.frag" />
+      <EmbeddedResource Include="Shaders\VertexShader.vert" />
+      <None Remove="Resources\chrysler\Body_Base_Color.png" />
+      <EmbeddedResource Include="Resources\chrysler\Body_Base_Color.png" />
+      <None Remove="Resources\chrysler\Body_Metallic.png" />
+      <EmbeddedResource Include="Resources\chrysler\Body_Metallic.png" />
+      <None Remove="Resources\chrysler\Body_Normal_OpenGL.png" />
+      <EmbeddedResource Include="Resources\chrysler\Body_Normal_OpenGL.png" />
+      <None Remove="Resources\chrysler\Body_Roughness.png" />
+      <EmbeddedResource Include="Resources\chrysler\Body_Roughness.png" />
+      <None Remove="Resources\chrysler\Chrysler_Saratoga_1960.obj" />
+      <EmbeddedResource Include="Resources\chrysler\Chrysler_Saratoga_1960.obj" />
+      <None Remove="Resources\chrysler\Glass_Base_Color.png" />
+      <EmbeddedResource Include="Resources\chrysler\Glass_Base_Color.png" />
+      <None Remove="Resources\chrysler\Glass_Metallic.png" />
+      <EmbeddedResource Include="Resources\chrysler\Glass_Metallic.png" />
+      <None Remove="Resources\chrysler\Glass_Opacity.png" />
+      <EmbeddedResource Include="Resources\chrysler\Glass_Opacity.png" />
+      <None Remove="Resources\chrysler\Glass_Roughness.png" />
+      <EmbeddedResource Include="Resources\chrysler\Glass_Roughness.png" />
+      <None Remove="Resources\chrysler\internal_ground_ao_texture.jpeg" />
+      <EmbeddedResource Include="Resources\chrysler\internal_ground_ao_texture.jpeg" />
+      <None Remove="Resources\chrysler\Tire_Base_Color.png" />
+      <EmbeddedResource Include="Resources\chrysler\Tire_Base_Color.png" />
+      <None Remove="Resources\chrysler\Tire_Metallic.png" />
+      <EmbeddedResource Include="Resources\chrysler\Tire_Metallic.png" />
+      <None Remove="Resources\chrysler\Tire_Normal_OpenGL.png" />
+      <EmbeddedResource Include="Resources\chrysler\Tire_Normal_OpenGL.png" />
+      <None Remove="Resources\chrysler\Tire_Roughness.png" />
+      <EmbeddedResource Include="Resources\chrysler\Tire_Roughness.png" />
+      <None Remove="Resources\road\road.3ds" />
+      <EmbeddedResource Include="Resources\road\road.3ds" />
+      <None Remove="Resources\road\road.blend" />
+      <EmbeddedResource Include="Resources\road\road.blend" />
+      <None Remove="Resources\road\road.dae" />
+      <EmbeddedResource Include="Resources\road\road.dae" />
+      <None Remove="Resources\road\road.fbx" />
+      <EmbeddedResource Include="Resources\road\road.fbx" />
+      <None Remove="Resources\road\road.mtl" />
+      <EmbeddedResource Include="Resources\road\road.mtl" />
+      <None Remove="Resources\road\road.obj" />
+      <EmbeddedResource Include="Resources\road\road.obj" />
+      <None Remove="Resources\road\road.png" />
+      <EmbeddedResource Include="Resources\road\road.png" />
+      <None Remove="Resources\road\road texture.dds" />
+      <EmbeddedResource Include="Resources\road\road texture.dds" />
+      <None Remove="Resources\road\texture.png" />
+      <EmbeddedResource Include="Resources\road\texture.png" />
+      <None Remove="Resources\road\normal.png" />
+      <EmbeddedResource Include="Resources\road\normal.png" />
+      <None Remove="Resources\road\specular.png" />
+      <EmbeddedResource Include="Resources\road\specular.png" />
+      <None Remove="Resources\scenes\main.sc" />
+      <EmbeddedResource Include="Resources\scenes\main.sc" />
+      <None Remove="Shaders\ShadowFragmentShader.frag" />
+      <EmbeddedResource Include="Shaders\ShadowFragmentShader.frag" />
+      <None Remove="Shaders\ShadowVertexShader.vert" />
+      <EmbeddedResource Include="Shaders\ShadowVertexShader.vert" />
+    </ItemGroup>
+
+</Project>
