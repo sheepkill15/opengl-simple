@@ -50,7 +50,7 @@ public class Material
         }
 
         var textureBytes = (ReadOnlySpan<byte>)imageResult.Data.AsSpan();
-        gl.ActiveTexture(TextureUnit.Texture0 + (int)type);
+        // gl.ActiveTexture(TextureUnit.Texture0 + (int)type);
         // bind texture
         gl.BindTexture(TextureTarget.Texture2D, texture);
             

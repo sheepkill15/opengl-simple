@@ -1,4 +1,6 @@
-﻿using Silk.NET.Maths;
+﻿using System.Numerics;
+using ImGuiNET;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 
 namespace Autopalya;
@@ -37,19 +39,22 @@ public class Scene
     
     public unsafe void Draw(GL gl, Shader shader)
     {
+        gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         int[] oldViewport = new int[4];
         gl.GetInteger(GetPName.Viewport, (Span<int>)oldViewport);
-        // Lights[0].BindFramebuffer(gl);
-        // _shadowShader!.Use(gl);
+        Lights[0].ShadowMap.BindForWriting(gl);
+        _shadowShader!.Use(gl);
         var lightSpaceMatrix = Lights[0].GetLightSpaceMatrix();
-        // gl.UniformMatrix4(_shadowShader.GetUniformLocation(gl, ViewMatrixVariableName), 1, false, (float*)&lightSpaceMatrix);
-        // Program.CheckError();
+        gl.UniformMatrix4(_shadowShader.GetUniformLocation(gl, ViewMatrixVariableName), 1, false, (float*)&lightSpaceMatrix);
+        // gl.Clear(ClearBufferMask.DepthBufferBit);
         // // Program.CheckError();
+        // // // Program.CheckError();
         // foreach (var obj in Objects)
         // {
         //     obj.Draw(gl, _shadowShader, false);
         // }
-        // gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        // gl.Clear(ClearBufferMask.DepthBufferBit);
+        gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         // Program.CheckError();
         shader.Use(gl);
         // Program.CheckError();
@@ -58,9 +63,7 @@ public class Scene
         gl.Viewport(oldViewport[0], oldViewport[1], (uint)oldViewport[2], (uint)oldViewport[3]);
         // Program.CheckError();
         //
-        gl.ActiveTexture(TextureUnit.Texture15);
-        // Program.CheckError();
-        gl.BindTexture(TextureTarget.Texture2D, Lights[0].ShadowMap);
+        Lights[0].ShadowMap.BindForReading(gl, TextureUnit.Texture15);
         // Program.CheckError();
         gl.Uniform1(shader.GetUniformLocation(gl, ShadowMapVariableName), 15);
         // Program.CheckError();
