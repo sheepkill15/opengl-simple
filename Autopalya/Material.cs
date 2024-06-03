@@ -41,7 +41,18 @@ public class Material
 
     private bool _disposed;
 
-    public void AddTexture(GL gl, TextureType type, ImageResult imageResult)
+
+    public void AddLoadedTexture(TextureType type, uint loc)
+    {
+        _textureMap.Remove(type);
+        _textureMap.Add(type, loc);        
+        if (type == TextureType.Alpha)
+        {
+            Dissolve = 0.1f;
+        }
+    }
+    
+    public void AddTexture(GL gl, TextureType type, ImageResult imageResult, string path)
     {
         var texture = gl.GenTexture();
         if (_textureMap.TryGetValue(type, out var value))
@@ -63,6 +74,11 @@ public class Material
 
         gl.BindTexture(TextureTarget.Texture2D, 0);
         _textureMap.Add(type, texture);
+        TextureLoader.AddGlTexture(path, texture);
+        if (type == TextureType.Alpha)
+        {
+            Dissolve = 0.1f;
+        }
         Console.WriteLine($"Got texture {Name}.{type} - {texture}");
     }
 
@@ -73,7 +89,7 @@ public class Material
         {
             var textureLoc = shader.GetUniformLocation(gl, TextureUniformNames[(int)textureType]);
 
-            if (textureLoc <= 0)
+            if (textureLoc < 0)
             {
                 continue;
             }
@@ -81,23 +97,21 @@ public class Material
             Program.CheckError();
             if (_textureMap.TryGetValue(textureType, out var value))
             {
-                if (value <= 0) continue;
+                if (value == 0) continue;
                 gl.BindTexture(TextureTarget.Texture2D, value);
-                Program.CheckError();
-                gl.Uniform1(textureLoc, (int)textureType);
                 Program.CheckError();
             }
             else
             {
                 gl.BindTexture(TextureTarget.Texture2D, 0);
-                gl.Uniform1(textureLoc, 0);
                 Program.CheckError();
             }
+            gl.Uniform1(textureLoc, (int)textureType);
         }
 
         var ambientLocation = shader.GetUniformLocation(gl, AmbientUniformName);
 
-        if (ambientLocation > 0)
+        if (ambientLocation >= 0)
         {
             gl.Uniform3(ambientLocation, AmbientColor.X, AmbientColor.Y, AmbientColor.Z);
             Program.CheckError();
@@ -105,7 +119,7 @@ public class Material
 
         var diffuseLocation = shader.GetUniformLocation(gl, DiffuseUniformName);
 
-        if (diffuseLocation > 0)
+        if (diffuseLocation >= 0)
         {
             gl.Uniform3(diffuseLocation, DiffuseColor.X, DiffuseColor.Y, DiffuseColor.Z);
             Program.CheckError();
@@ -113,7 +127,7 @@ public class Material
 
         var specularLocation = shader.GetUniformLocation(gl, SpecularUniformName);
 
-        if (specularLocation > 0)
+        if (specularLocation >= 0)
         {
             gl.Uniform3(specularLocation, SpecularColor.X, SpecularColor.Y, SpecularColor.Z);
             Program.CheckError();
@@ -121,33 +135,37 @@ public class Material
 
         var sComponentLoc = shader.GetUniformLocation(gl, SComponentUniformName);
 
-        if (sComponentLoc > 0)
+        if (sComponentLoc >= 0)
         {
             gl.Uniform1(sComponentLoc, SpecularComponent);
             Program.CheckError();
         }
 
         var dissolveLoc = shader.GetUniformLocation(gl, DissolveUniformName);
-        if (dissolveLoc > 0)
+        if (dissolveLoc >= 0)
         {
             gl.Uniform1(dissolveLoc, Dissolve);
             Program.CheckError();
         }
 
         var refrIndexLoc = shader.GetUniformLocation(gl, RefractionIndexUniformName);
-        if (refrIndexLoc > 0)
+        if (refrIndexLoc >= 0)
         {
             gl.Uniform1(refrIndexLoc, RefractionIndex);
             Program.CheckError();
         }
 
         var trFcLoc = shader.GetUniformLocation(gl, TransmissionFilterUniformName);
-        if (trFcLoc > 0)
+        if (trFcLoc >= 0)
         {
             gl.Uniform3(trFcLoc, TransmissionFilterColor.X, TransmissionFilterColor.Y, TransmissionFilterColor.Z);
             Program.CheckError();
         }
-        
+    }
+
+    public bool HasTexture(TextureType type)
+    {
+        return _textureMap.ContainsKey(type) && _textureMap[type] >= 0;
     }
 
     public void Dispose(GL gl)

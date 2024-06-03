@@ -75,8 +75,6 @@ vec3 calculateLightContribution(Light light, vec3 V, vec3 albedo, float metallic
     float attenuation = 1.0 / (1.0 + light.attenuationFalloff * distance * distance);
     attenuation = clamp(attenuation, 0.0, 1.0);
     vec3 radiance     = light.color * (attenuation * light.intensity);
-
-
     vec3 F0 = vec3(0.04);
     F0      = mix(F0, albedo, metallic);
     vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
@@ -96,19 +94,40 @@ vec3 calculateLightContribution(Light light, vec3 V, vec3 albedo, float metallic
     return Lo * intensity;
 }
 
-float ShadowCalculation(vec4 fragPosLightSpace) {
+float LinearizeDepth(float depth)
+{
+    float near_plane = 0.1;
+    float far_plane = 10;
+    float z = depth * 2.0 - 1.0; // Back to NDC 
+    return (2.0 * near_plane * far_plane) / (far_plane + near_plane - z * (far_plane - near_plane));
+}
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float closestDepth = (texture(shadowMap, projCoords.xy).r);
     float currentDepth = projCoords.z;
-    return currentDepth;
-    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+    // Bias to avoid shadow acne
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+
+    // Simple shadow calculation
+    float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
 
     return shadow;
 }
 
 void main()
 {
+//    vec3 projCoords = FragPosLightSpace.xyz / FragPosLightSpace.w;
+//    projCoords = projCoords * 0.5 + 0.5;
+//    float closestDepth = LinearizeDepth(texture(shadowMap, projCoords.xy).r);
+//    FragColor = vec4(projCoords, 1.0);
+//    return;
+//    float depth = texture(shadowMap, outTex).r;
+//    FragColor = vec4(vec3(closestDepth), 1.0);
+//    return;
     vec3 texNormal = normalize(texture(BumpTexture, outTex).rgb);
     texNormal = normalize(texNormal * 2.0 - 1.0);
     texNormal = normalize(TBN * texNormal);
@@ -116,18 +135,19 @@ void main()
     float metallic = texture(DecalTexture, outTex).r;
     float roughness = max(texture(SpecularTexture, outTex).r, SpecularComponent / 1000);
     vec3 N = texNormal;
-    float alpha = 1.0 - texture(AlphaTexture, outTex).r;
+    float alpha = texture(AlphaTexture, outTex).r + Dissolve;
     vec3 V = normalize(outWorldPosition - viewPos);
     vec3 Lo = vec3(0.0);
     for(int i = 0; i < lights.length(); i++) {
         Lo += calculateLightContribution(lights[i], V, albedo, metallic, N, roughness);
+        vec3 L = normalize(lights[i].position - outWorldPosition);
+        float shadow = ShadowCalculation(FragPosLightSpace, N, L);
+        Lo = (1 - shadow) * Lo;
     }
-    float shadow = ShadowCalculation(FragPosLightSpace);
-//    Lo = (1 - shadow) * Lo;
     vec3 ambient = AmbientColor * albedo * 0.03;
     vec3 color   = ambient + Lo;
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));
     
-    FragColor = vec4(color, outCol.a * alpha * Dissolve);
+    FragColor = vec4(color, outCol.a * alpha);
 }

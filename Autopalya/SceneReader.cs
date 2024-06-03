@@ -68,6 +68,15 @@ public class SceneReader
                                 };
                                 model.SetRotation(newRot);
                                 break;
+                            case "ts":
+                                var ts = keyvalue[1].Split(',');
+                                var newTs = new Vector3D<float>
+                                {
+                                    X = float.Parse(ts[0], CultureInfo.InvariantCulture),
+                                    Y = float.Parse(ts[1], CultureInfo.InvariantCulture)
+                                };
+                                model.SetTextureScale(newTs);
+                                break;
                         }
                     }
                     break;
@@ -95,6 +104,7 @@ public class SceneReader
                                 light.Direction.X = float.Parse(dir[0], CultureInfo.InvariantCulture);
                                 light.Direction.Y = float.Parse(dir[1], CultureInfo.InvariantCulture);
                                 light.Direction.Z = float.Parse(dir[2], CultureInfo.InvariantCulture);
+                                light.Direction = Vector3D.Normalize(light.Direction);
                                 break;
                             case "ic":
                                 var value = float.Parse(keyvalue[1], CultureInfo.InvariantCulture);

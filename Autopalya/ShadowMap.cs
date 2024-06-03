@@ -4,8 +4,8 @@ namespace Autopalya;
 
 public class ShadowMap
 {
-    public const int Width = 1024;
-    public const int Height = 1024;
+    public const int Width = 2048;
+    public const int Height = 2048;
 
     private uint _fbo;
     private uint _shadowMap;
@@ -14,12 +14,15 @@ public class ShadowMap
     {
         _fbo = gl.GenFramebuffer();
         _shadowMap = gl.GenTexture();
+        Console.WriteLine($"ShadowMap id: {_shadowMap} for FBO {_fbo}");
         gl.BindTexture(TextureTarget.Texture2D, _shadowMap);
         gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.DepthComponent, Width, Height, 0, PixelFormat.DepthComponent, PixelType.Float, null);
         gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
         gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-        gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-        gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+        gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
+        gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
+        float[] border = [1.0f, 1.0f, 1.0f, 1.0f];
+        gl.TexParameter(TextureTarget.Texture2D, GLEnum.TextureBorderColor, (ReadOnlySpan<float>)border);
         gl.BindFramebuffer(FramebufferTarget.Framebuffer, _fbo);
         gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment,
             TextureTarget.Texture2D, _shadowMap, 0);

@@ -11,6 +11,8 @@ public class GlObject(uint vao, uint vertices, uint colors, uint indeces, uint i
     public uint Indices { get; } = indeces;
     public uint IndexArrayLength { get; } = indexArrayLength;
 
+    private bool _disposed = false;
+    
     public Material Material { get; } = material ?? Material.BaseMaterial;
 
     public readonly Box3D<float> BoundingBox = new()
@@ -21,6 +23,12 @@ public class GlObject(uint vao, uint vertices, uint colors, uint indeces, uint i
 
     internal void ReleaseGlObject()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
         // always unbound the vertex buffer first, so no halfway results are displayed by accident
         gl.DeleteBuffer(Vertices);
         gl.DeleteBuffer(Colors);

@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Silk.NET" Version="2.20.0"/>
+        <PackageReference Include="Silk.NET" Version="2.21.0" />
         <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.21.0"/>
         <PackageReference Include="StbImageSharp" Version="2.27.14"/>
     </ItemGroup>
@@ -18,7 +18,6 @@
       <None Remove="Resources\skybox.png" />
       <EmbeddedResource Include="Resources\skybox.png" />
       <None Remove="Shaders\FragmentShader.frag" />
-      <EmbeddedResource Include="Shaders\FragmentShader.frag" />
       <None Remove="Shaders\VertexShader.vert" />
       <EmbeddedResource Include="Shaders\PBRFragment.frag" />
       <EmbeddedResource Include="Shaders\VertexShader.vert" />
@@ -78,6 +77,82 @@
       <EmbeddedResource Include="Shaders\ShadowFragmentShader.frag" />
       <None Remove="Shaders\ShadowVertexShader.vert" />
       <EmbeddedResource Include="Shaders\ShadowVertexShader.vert" />
+      <None Remove="Resources\rat\rat.obj" />
+      <EmbeddedResource Include="Resources\rat\rat.obj" />
+      <None Remove="Resources\rat\VAZ2101_Body_AO.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_AO.png" />
+      <None Remove="Resources\rat\VAZ2101_Body_BaseColor.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_BaseColor.png" />
+      <None Remove="Resources\rat\VAZ2101_Body_Emissive.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_Emissive.png" />
+      <None Remove="Resources\rat\VAZ2101_Body_Metallic.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_Metallic.png" />
+      <None Remove="Resources\rat\VAZ2101_Body_Normal.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_Normal.png" />
+      <None Remove="Resources\rat\VAZ2101_Body_Roughness.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Body_Roughness.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_AO.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_AO.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_BaseColor.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_BaseColor.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_Metallic.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_Metallic.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_Normal.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_Normal.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_Opacity.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_Opacity.png" />
+      <None Remove="Resources\rat\VAZ2101_Glass_Roughness.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Glass_Roughness.png" />
+      <None Remove="Resources\rat\VAZ2101_Interior_AO.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Interior_AO.png" />
+      <None Remove="Resources\rat\VAZ2101_Interior_BaseColor.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Interior_BaseColor.png" />
+      <None Remove="Resources\rat\VAZ2101_Interior_Normal.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Interior_Normal.png" />
+      <None Remove="Resources\rat\VAZ2101_Interior_Roughness.png" />
+      <EmbeddedResource Include="Resources\rat\VAZ2101_Interior_Roughness.png" />
+      <None Remove="Resources\rat\Wheel_195_50R13x10_AO.png" />
+      <EmbeddedResource Include="Resources\rat\Wheel_195_50R13x10_AO.png" />
+      <None Remove="Resources\rat\Wheel_195_50R13x10_BaseColor.png" />
+      <EmbeddedResource Include="Resources\rat\Wheel_195_50R13x10_BaseColor.png" />
+      <None Remove="Resources\rat\Wheel_195_50R13x10_Metallic.png" />
+      <EmbeddedResource Include="Resources\rat\Wheel_195_50R13x10_Metallic.png" />
+      <None Remove="Resources\rat\Wheel_195_50R13x10_Normal.png" />
+      <EmbeddedResource Include="Resources\rat\Wheel_195_50R13x10_Normal.png" />
+      <None Remove="Resources\rat\Wheel_195_50R13x10_Roughness.png" />
+      <EmbeddedResource Include="Resources\rat\Wheel_195_50R13x10_Roughness.png" />
+      <None Remove="Resources\city\textures\AussenWand_C.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\AussenWand_C.jpg" />
+      <None Remove="Resources\city\textures\AussenWand_N.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\AussenWand_N.jpg" />
+      <None Remove="Resources\city\textures\Box_D.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Box_D.jpg" />
+      <None Remove="Resources\city\textures\Box_N.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Box_N.jpg" />
+      <None Remove="Resources\city\textures\fire extinguisher_ref.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\fire extinguisher_ref.jpg" />
+      <None Remove="Resources\city\textures\Grass_col.JPG" />
+      <EmbeddedResource Include="Resources\city\textures\Grass_col.JPG" />
+      <None Remove="Resources\city\textures\Hotel_Hous_AO.png" />
+      <EmbeddedResource Include="Resources\city\textures\Hotel_Hous_AO.png" />
+      <None Remove="Resources\city\textures\REF_1.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\REF_1.jpg" />
+      <None Remove="Resources\city\textures\Reflexion.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Reflexion.jpg" />
+      <None Remove="Resources\city\textures\SKY.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\SKY.jpg" />
+      <None Remove="Resources\city\textures\Steel_C.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Steel_C.jpg" />
+      <None Remove="Resources\city\textures\Steel_N.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Steel_N.jpg" />
+      <None Remove="Resources\city\textures\Steel_S.jpg" />
+      <EmbeddedResource Include="Resources\city\textures\Steel_S.jpg" />
+      <None Remove="Resources\city\building1.obj" />
+      <EmbeddedResource Include="Resources\city\building1.obj" />
+      <None Remove="Resources\city\cube.obj" />
+      <EmbeddedResource Include="Resources\city\cube.obj" />
+      <None Remove="Resources\city\building2.obj" />
+      <EmbeddedResource Include="Resources\city\building2.obj" />
     </ItemGroup>
 
 </Project>

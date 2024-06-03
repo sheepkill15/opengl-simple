@@ -36937,6 +36937,7 @@ map_Kd chrysler.Glass_Base_Color.png
 map_Ks chrysler.Glass_Roughness.png
 map_d chrysler.Glass_Opacity.png
 decal chrysler.Glass_Metallic.png
+map_bump road.normal.png
 s 1
 f 8480/7640/8341 8481/7641/8342 8482/7642/8343 8483/7643/8344 
 f 8483/7643/8344 8482/7642/8343 8484/7644/8345 8485/7645/8346 

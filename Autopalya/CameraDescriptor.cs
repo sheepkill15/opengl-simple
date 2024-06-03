@@ -14,6 +14,8 @@ public class CameraDescriptor
         public bool RotateUp { get; set; } = false;
         public bool RotateDown { get; set; } = false;
 
+        public bool FirstPerson = false;
+
         public Vector3D<float> Position { get; set; } = new(0, 0, 0);
 
         // Yaw, Pitch, Roll
@@ -24,53 +26,64 @@ public class CameraDescriptor
 
         public float Fov { get; set; } = (float)Math.PI / 3;
 
-        public float MoveAxisX
+        public float MoveAxisX { get; private set; } = 0;
+        public float MoveAxisY { get; private set; } = 0;
+        public float RotateAxisX { get; private set; } = 0;
+        public float RotateAxisY { get; private set; } = 0;
+
+        private const float TimeToLockMove = 1; // seconds
+        private const float TimeToLockRotate = 0.1f; // seconds
+
+        public void Update(double deltaTime)
         {
-            get
+            float moveXTarget = 0;
+            if (MoveLeft)
             {
-                return MoveLeft switch
-                {
-                    true when MoveRight => 0,
-                    true => -1,
-                    _ => MoveRight ? 1 : 0
-                };
+                moveXTarget = -1;
             }
-        }
-        public float MoveAxisY
-        {
-            get
+
+            if (MoveRight)
             {
-                return MoveForward switch
-                {
-                    true when MoveBackward => 0,
-                    true => -1,
-                    _ => MoveBackward ? 1 : 0
-                };
+                moveXTarget += 1;
             }
-        }
-        public float RotateAxisX
-        {
-            get
+
+            MoveAxisX += (moveXTarget - MoveAxisX) / TimeToLockMove * (float)deltaTime;
+
+            float moveYTarget = 0; 
+            if (MoveBackward)
             {
-                return RotateLeft switch
-                {
-                    true when RotateRight => 0,
-                    true => -1,
-                    _ => RotateRight ? 1 : 0
-                };
+                moveYTarget = -1;
             }
-        }
-        public float RotateAxisY
-        {
-            get
+            
+            if (MoveForward)
             {
-                return RotateUp switch
-                {
-                    true when RotateDown => 0,
-                    true => -1,
-                    _ => RotateDown ? 1 : 0
-                };
+                moveYTarget += 1;
             }
+            MoveAxisY += (moveYTarget - MoveAxisY) / TimeToLockMove * (float)deltaTime;
+
+            float rotateXTarget = 0;
+            if (RotateLeft)
+            {
+                rotateXTarget = -1;
+            }
+
+            if (RotateRight)
+            {
+                rotateXTarget += 1;
+            }
+            RotateAxisX += (rotateXTarget - RotateAxisX) / TimeToLockRotate * (float)deltaTime;
+
+            float rotateYTarget = 0;
+            if (RotateDown)
+            {
+                rotateYTarget = -1;
+            }
+            
+            if (RotateUp)
+            {
+                rotateYTarget += 1;
+            }
+            RotateAxisY += (rotateYTarget - RotateAxisY) / TimeToLockRotate * (float)deltaTime;
         }
 
         public void Move(Vector3D<float> amount)

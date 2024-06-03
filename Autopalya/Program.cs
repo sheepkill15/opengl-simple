@@ -18,9 +18,9 @@ internal static class Program
 
     private static ImGuiController _controller = null!;
 
-
-    private static Scene _scene = null!;
     private static Shader _mainShader = null!;
+
+    private static ModelObject _mainCar = null!;
 
 
     private static void Main()
@@ -68,7 +68,6 @@ internal static class Program
 
         _gl.ClearColor(Color.Black);
 
-        _scene = SceneReader.ReadSceneFromResource(_gl, "scenes.main.sc");
 
         //Gl.Enable(EnableCap.CullFace);
 
@@ -79,9 +78,10 @@ internal static class Program
         _gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
         _mainShader = Shader.LoadShadersFromResource(_gl, "VertexShader.vert", "PBRFragment.frag");
+        _mainShader.Use(_gl);
         
-        _scene.Init(_gl, _mainShader);
-
+        GameManager.GetInstance().Init(_gl);
+        
         _gl.UseProgram(0);
     }
 
@@ -91,28 +91,30 @@ internal static class Program
         switch (key)
         {
             case Key.Left:
-                _scene.Camera.MoveLeft = true;
+                GameManager.MainCamera.MoveLeft = true;
+                GameManager.MainCamera.RotateLeft = true;
                 break;
             case Key.Right:
-                _scene.Camera.MoveRight = true;
+                GameManager.MainCamera.MoveRight = true;
+                GameManager.MainCamera.RotateRight = true;
                 break;
             case Key.Down:
-                _scene.Camera.MoveBackward = true;
+                GameManager.MainCamera.MoveBackward = true;
                 break;
             case Key.Up:
-                _scene.Camera.MoveForward = true;
+                GameManager.MainCamera.MoveForward = true;
                 break;
             case Key.W:
-                _scene.Camera.RotateUp = true;
+                GameManager.MainCamera.RotateUp = true;
                 break;
             case Key.S:
-                _scene.Camera.RotateDown = true;
+                GameManager.MainCamera.RotateDown = true;
                 break;
             case Key.A:
-                _scene.Camera.RotateLeft = true;
+                GameManager.MainCamera.RotateLeft = true;
                 break;
             case Key.D:
-                _scene.Camera.RotateRight = true;
+                GameManager.MainCamera.RotateRight = true;
                 break;
         }
     }
@@ -122,30 +124,38 @@ internal static class Program
         switch (key)
         {
             case Key.Left:
-                _scene.Camera.MoveLeft = false;
+                GameManager.MainCamera.MoveLeft = false;
+                GameManager.MainCamera.RotateLeft = false;
                 break;
             case Key.Right:
-                _scene.Camera.MoveRight = false;
+                GameManager.MainCamera.MoveRight = false;
+                GameManager.MainCamera.RotateRight = false;
+
                 break;
             case Key.Down:
-                _scene.Camera.MoveBackward = false;
+                GameManager.MainCamera.MoveBackward = false;
                 break;
             case Key.Up:
-                _scene.Camera.MoveForward = false;
+                GameManager.MainCamera.MoveForward = false;
                 break;
             case Key.W:
-                _scene.Camera.RotateUp = false;
+                GameManager.MainCamera.RotateUp = false;
                 break;
             case Key.S:
-                _scene.Camera.RotateDown = false;
+                GameManager.MainCamera.RotateDown = false;
                 break;
             case Key.A:
-                _scene.Camera.RotateLeft = false;
+                GameManager.MainCamera.RotateLeft = false;
                 break;
             case Key.D:
-                _scene.Camera.RotateRight = false;
+                GameManager.MainCamera.RotateRight = false;
                 break;
             case Key.Space:
+                GameManager.MainCamera.FirstPerson = !GameManager.MainCamera.FirstPerson;
+                if (GameManager.MainCamera.FirstPerson)
+                {
+                    GameManager.MainCamera.Position = GameManager.MainCamera.Position with { Y = -0.1f };
+                }
                 break;
         }
     }
@@ -159,32 +169,21 @@ internal static class Program
         // NO GL calls
 
         _controller.Update((float)deltaTime);
-
-        float moveX = _scene.Camera.MoveAxisX * (float)deltaTime * _scene.Camera.MoveSpeed;
-        float moveY = _scene.Camera.MoveAxisY * (float)deltaTime * _scene.Camera.MoveSpeed;
-        Vector3D<float> movement = moveX * _scene.Camera.Right + moveY * _scene.Camera.Forward;
-        _scene.Camera.Move(movement);
-
-
-        float rotateX = _scene.Camera.RotateAxisX * (float)deltaTime * _scene.Camera.RotateSpeed;
-        float rotateY = _scene.Camera.RotateAxisY * (float)deltaTime * _scene.Camera.RotateSpeed;
-        _scene.Camera.Rotate(rotateY, rotateX);
+        GameManager.GetInstance().Update(deltaTime);
+        // _scene.Camera.Rotate(rotateY, rotateX);
     }
 
     private static void Window_Render(double deltaTime)
     {
         //Console.WriteLine($"Render after {deltaTime} [s].");
         
-        _scene.Draw(_gl, _mainShader);
+        GameManager.GetInstance().Draw(_gl, _mainShader, deltaTime);
 
         // DrawRevolvingCube();
 
         // DrawSkyBox();
 
         //ImGuiNET.ImGui.ShowDemoWindow();
-        ImGui.Begin("Lighting properties",
-            ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoTitleBar);
-        ImGui.End();
 
 
         _controller.Render();
@@ -194,7 +193,7 @@ internal static class Program
 
     private static void Window_Closing()
     {
-        _scene.Dispose(_gl);
+        GameManager.GetInstance().Dispose(_gl);
     }
 
     public static void CheckError()

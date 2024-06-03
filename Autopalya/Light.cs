@@ -18,16 +18,21 @@ public class Light
     {
         ShadowMap.Init(gl);
     }
-
-    public Matrix4X4<float> GetLightSpaceMatrix()
+    public Matrix4X4<float> GetViewMatrix()
     {
-        var projection = Matrix4X4.CreatePerspectiveFieldOfView(OuterCutOff, 1f, 0.1f, 20f);
-        var view = projection * Matrix4X4.CreateLookAt(Position, Position + Direction, Vector3D<float>.UnitY);
-        return view;
+        return Matrix4X4.CreateLookAt(Position, Position + Direction, Vector3D<float>.UnitY);
+        // return Matrix4X4.CreateLookAt(Vector3D<float>.Zero, Direction, Vector3D<float>.UnitY);
+    }
+    
+    public Matrix4X4<float> GetProjectionMatrix()
+    {
+        return Matrix4X4.CreateOrthographic(10f, 10f, 1f, 10f);
+        // return Matrix4X4.CreatePerspectiveFieldOfView(OuterCutOff, 1f, 0.1f, 10f);
     }
 
     public void Dispose(GL gl)
     {
         ShadowMap.Dispose(gl);
     }
+
 }

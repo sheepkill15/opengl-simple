@@ -9,7 +9,10 @@ uniform mat4 uModel;
 uniform mat3 uNormal;
 uniform mat4 uView;
 uniform mat4 uProjection;
-uniform mat4 lightSpaceMatrix;
+uniform mat4 lightView;
+uniform mat4 lightProj;
+
+uniform vec2 TextureScale;
 
 out vec4 outCol;
 out vec3 outNormal;
@@ -22,11 +25,11 @@ out vec4 FragPosLightSpace;
 void main()
 {
     outCol = vCol;
-    outTex = vTex;
+    outTex = TextureScale * vTex;
     outWorldPosition = vec3(uModel*vec4(vPos.x, vPos.y, vPos.z, 1.0));
     gl_Position = uProjection*uView*vec4(outWorldPosition, 1.0);
     outNormal = uNormal*vNorm;
-    FragPosLightSpace = lightSpaceMatrix * vec4(outWorldPosition, 1.0);
+    FragPosLightSpace = lightProj * lightView * vec4(outWorldPosition, 1.0);
     vec3 T = normalize(vec3(uModel * vec4(tangent, 0.0)));
     vec3 N = normalize(vec3(uModel * vec4(outNormal, 0.0)));
     // re-orthogonalize T with respect to N
